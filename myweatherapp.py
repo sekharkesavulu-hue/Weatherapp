@@ -68,6 +68,36 @@ def summarize(client: OpenAI, weather: dict) -> str:
 st.set_page_config(page_title="myweatherapp", page_icon="🌤️")
 st.title("🌤️ myweatherapp")
 
+THEMES = {
+    "dark": {"bg": "#0e1117", "sidebar": "#1a1d24", "text": "#fafafa", "input": "#262730", "border": "#4a4d57"},
+    "light": {"bg": "#ffffff", "sidebar": "#f0f2f6", "text": "#31333f", "input": "#ffffff", "border": "#d0d3da"},
+}
+
+
+def apply_theme(mode: str) -> None:
+    """Override Streamlit's colours so the in-app toggle works regardless of the browser theme."""
+    t = THEMES[mode]
+    st.markdown(
+        f"""
+        <style>
+        .stApp, [data-testid="stHeader"] {{ background-color: {t['bg']}; }}
+        [data-testid="stSidebar"] {{ background-color: {t['sidebar']}; }}
+        .stApp, .stApp p, .stApp label, .stApp h1, .stApp h2, .stApp h3,
+        .stApp span, .stApp li, [data-testid="stMetric"] *, [data-testid="stCaptionContainer"] * {{
+            color: {t['text']};
+        }}
+        [data-testid="stTextInput"] input {{
+            background-color: {t['input']}; color: {t['text']};
+        }}
+        [data-testid="stTextInputRootElement"] {{
+            background-color: {t['input']}; border-color: {t['border']};
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 def reset_form():
     st.session_state["city"] = ""
     st.session_state["api_key_input"] = ""
@@ -76,6 +106,11 @@ def reset_form():
 api_key = os.getenv("OPENAI_API_KEY") or st.sidebar.text_input(
     "OpenAI API key", type="password", key="api_key_input"
 )
+if "dark_mode" not in st.session_state:
+    st.session_state["dark_mode"] = getattr(st.context.theme, "type", None) == "dark"
+dark_mode = st.sidebar.toggle("🌙 Dark mode", key="dark_mode")
+apply_theme("dark" if dark_mode else "light")
+
 city = st.text_input("City", placeholder="e.g. London", key="city")
 
 st.markdown(
