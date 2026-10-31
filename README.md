@@ -29,6 +29,11 @@ streamlit run myweatherapp.py
 
 Enter a city, click **Get weather**, and you'll see temperature, feels-like, humidity, wind, conditions, and the AI summary.
 
+### Features
+
+- **Refresh** (green button): clears the City field and the sidebar API key field so you can start over.
+- **Dark mode** (sidebar toggle): switches between dark and light colour schemes. It starts in dark mode if your browser/Streamlit theme is dark, and Refresh doesn't reset it. Colours are applied with CSS overrides, since Streamlit has no API to change the theme at runtime.
+
 ## Project layout
 
 | File | Purpose |
@@ -40,4 +45,5 @@ Enter a city, click **Get weather**, and you'll see temperature, feels-like, hum
 ## Notes
 
 - Python 3.10+ is required (the code uses `dict | None` type syntax).
+- A recent Streamlit is required (the app uses `st.context.theme` and horizontal containers).
 - Never commit `.env`. It is listed in `.gitignore`.
