@@ -1,4 +1,4 @@
-# myweatherapp
+# Deepa's wizard
 
 A small Streamlit app that shows the current weather for any city, with a short AI-written summary and clothing suggestion.
 
@@ -27,7 +27,7 @@ If `OPENAI_API_KEY` isn't set, the app shows an "OpenAI API key" field in the si
 streamlit run myweatherapp.py
 ```
 
-Enter a city, click **Get weather**, and you'll see temperature, feels-like, humidity, wind, conditions, and the AI summary.
+Enter a city, click **Weather**, and you'll see temperature, feels-like, humidity, wind, conditions, and the AI summary.
 
 ### Features
 

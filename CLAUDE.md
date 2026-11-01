@@ -17,7 +17,7 @@ There are no tests or linter configured. Python 3.10+ is required (`dict | None`
 The whole app is a single script, `myweatherapp.py`, that Streamlit re-executes top to bottom on every interaction. There are no modules or classes.
 
 - **Data layer:** `get_current_weather()` calls Open-Meteo geocoding then forecast (no key needed) and returns a flat dict, or `None` if the city isn't found. `WEATHER_CODES` maps WMO codes to text. `summarize()` sends that dict to OpenAI (`gpt-4o-mini`) for a short summary and clothing suggestion.
-- **UI layer:** the rest of the file is the Streamlit page. Results render only on the run in which "Get weather" was clicked (`get_clicked`), so any other interaction, such as toggling dark mode, clears the displayed result.
+- **UI layer:** the rest of the file is the Streamlit page. Results render only on the run in which "Weather" was clicked (`get_clicked`), so any other interaction, such as toggling dark mode, clears the displayed result.
 
 ## Streamlit gotchas specific to this app
 

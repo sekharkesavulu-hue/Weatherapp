@@ -65,8 +65,8 @@ def summarize(client: OpenAI, weather: dict) -> str:
     return response.choices[0].message.content
 
 
-st.set_page_config(page_title="myweatherapp", page_icon="🌤️")
-st.title("🌤️ myweatherapp")
+st.set_page_config(page_title="Deepa's wizard", page_icon="🌤️")
+st.title("🌤️ Deepa's wizard")
 
 THEMES = {
     "dark": {"bg": "#0e1117", "sidebar": "#1a1d24", "text": "#fafafa", "input": "#262730", "border": "#4a4d57"},
@@ -113,41 +113,50 @@ apply_theme("dark" if dark_mode else "light")
 
 city = st.text_input("City", placeholder="e.g. London", key="city")
 
+weather_btn = {"bg": "#e53935", "hover": "#c62828", "text": "#ffffff"} if dark_mode else {
+    "bg": "#f5c518", "hover": "#d9ab0a", "text": "#1a1a1a"
+}
 st.markdown(
-    """
+    f"""
     <style>
-    .st-key-refresh_btn button {
+    .st-key-weather_btn button {{
+        background-color: {weather_btn['bg']};
+        border-color: {weather_btn['bg']};
+        color: {weather_btn['text']};
+    }}
+    .st-key-weather_btn button:hover {{
+        background-color: {weather_btn['hover']};
+        border-color: {weather_btn['hover']};
+        color: {weather_btn['text']};
+    }}
+    .st-key-refresh_btn button {{
         background-color: #2e9e4f;
         border-color: #2e9e4f;
         color: white;
-    }
-    .st-key-refresh_btn button:hover {
+    }}
+    .st-key-refresh_btn button:hover {{
         background-color: #247d3e;
         border-color: #247d3e;
         color: white;
-    }
+    }}
     </style>
     """,
     unsafe_allow_html=True,
 )
 
 with st.container(horizontal=True, gap="xxsmall"):
-    get_clicked = st.button("Get weather", type="primary")
+    get_clicked = st.button("Weather", key="weather_btn", type="primary")
     st.button("Refresh", key="refresh_btn", on_click=reset_form)
 
 if get_clicked and city.strip():
-    if not api_key:
-        st.error("Set OPENAI_API_KEY or enter your key in the sidebar.")
-        st.stop()
     try:
         with st.spinner("Fetching weather..."):
             weather = get_current_weather(city.strip())
-            if weather is None:
-                st.warning(f"Couldn't find a city named '{city}'.")
-                st.stop()
-            summary = summarize(OpenAI(api_key=api_key), weather)
     except Exception as e:
         st.error(f"Something went wrong: {e}")
+        st.stop()
+    if weather is None:
+        st.warning(f"Couldn't find a city named '{city}'.")
         st.stop()
 
     st.subheader(weather["location"])
@@ -157,4 +166,12 @@ if get_clicked and city.strip():
     c3.metric("Humidity", f"{weather['humidity_pct']} %")
     c4.metric("Wind", f"{weather['wind_kmh']} km/h")
     st.caption(f"Conditions: {weather['conditions']}")
-    st.info(summary)
+
+    if not api_key:
+        st.info("Set OPENAI_API_KEY or enter your key in the sidebar to get an AI summary.")
+    else:
+        try:
+            with st.spinner("Summarizing..."):
+                st.info(summarize(OpenAI(api_key=api_key), weather))
+        except Exception as e:
+            st.error(f"Couldn't generate the AI summary: {e}")
