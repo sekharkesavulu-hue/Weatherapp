@@ -65,8 +65,8 @@ def summarize(client: OpenAI, weather: dict) -> str:
     return response.choices[0].message.content
 
 
-st.set_page_config(page_title="Deepa's wizard", page_icon="🌤️")
-st.title("🌤️ Deepa's wizard")
+st.set_page_config(page_title="Global weather station", page_icon="🌤️")
+st.title("🌤️ Global weather station")
 
 THEMES = {
     "dark": {"bg": "#0e1117", "sidebar": "#1a1d24", "text": "#fafafa", "input": "#262730", "border": "#4a4d57"},

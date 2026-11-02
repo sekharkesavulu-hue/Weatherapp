@@ -1,4 +1,4 @@
-# Deepa's wizard
+# Global weather station
 
 A small Streamlit app that shows the current weather for any city, with a short AI-written summary and clothing suggestion.
 
